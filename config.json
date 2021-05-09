@@ -1,0 +1,18 @@
+{
+    "sources": [
+        "~/Downloads/",
+        "~/Documents/"
+    ],
+
+    "excludes": [
+        "node_modules", 
+        "cura", 
+        "mfrc522"
+    ], 
+
+    "dest": "gs://hex50/yoda",
+    "temp": "~/tmp"
+    
+}
+
+
