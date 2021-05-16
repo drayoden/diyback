@@ -24,24 +24,6 @@
 - start backup process
 - move tar.gz file and log file to gcs
 
-
-## using rsync...
-- assume local directory structure (assumes on weekly full backup, six differential backups):
-  - .yodaback
-    * \full
-    * \d1, \d2, .. \d6
-- script needs logic to determine which type of backup (full/diff). this will determine how rsync will react and which folder will be archived to gcs
-- full backup: `rsync -avh stuff/ backup/`
-- differential backup: `rsync -avh --compare-dest=$(pwd)/full/ source/ diff1/`
-- tests:
-    ```
-    rsync -a /home/sysadm/data/diyback/test/ /home/sysadm/.yodabak/full/ --delete-before
-    rsync -a --compare-dest=/home/sysadm/.yodabak/full/ /home/sysadm/data/diyback/test/ /home/sysadm/.yodabak/d4/ --delete-before
-
-    ```
-
-
-
 ## cron stuff I can never remember...
 Example of job definition:
 ```
@@ -58,7 +40,29 @@ Example of job definition:
 ```
 chmod +x <python file>
 * * * * * <pwd>/path/python-job.py
+# current crontab for backup:
 05 3 * * * /home/sysadm/.local/bin/yodaback.py >> /home/sysadm/.local/bin/yodaback.log
 ```
+
+---
+
+### using rsync...
+- initial run -> establish local backup folder (config.json) - verify/create
+- configr.json:
+    * last full backup (name or date or ?) -- lastfull
+    * last diff backup (name or date or number or ?) -- lastdiff
+    * number of diff backups (static) -- diffbacks
+    * sources need path AND name for rsync function
+- script needs logic to determine which type of backup (full/diff). this will determine how rsync will react and which incremental folder will be archived to gcs. this can be determined using the lastdiff and diffbacks from configr.json 
+- rsycn tests:
+    * `--delete-before` -- will exclude any file/folder that has been deleted
+        ```
+    # used for full backup:
+    rsync -a /home/sysadm/data/diyback/test/ /home/sysadm/.yodabak/full/ --delete-before
+
+    # used for diff backup:
+    rsync -a --compare-dest=/home/sysadm/.yodabak/full/ /home/sysadm/data/diyback/test/ /home/sysadm/.yodabak/d4/ --delete-before
+
+    ```
 
 
