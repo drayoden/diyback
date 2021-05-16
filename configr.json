@@ -1,24 +1,34 @@
 {
-    "sources": [
-        "/home/sysadm/Downloads/",
-        "/home/sysadm/Documents/",
-        "/home/sysadm/.local/bin/",
-        "/home/sysadm/data/"
-    ],
-
-    "excludes": [
-        "node_modules", 
-        ".vscode", 
-        ".git", 
-        ".venv", 
-        "lost+found",
-        ".Trash"
-    ], 
-
-    "dest": "gs://hex50/yoda/",
-    "temp": "/home/sysadm/tmp/",
-    "gsutil": "/home/sysadm/google-cloud-sdk/bin/gsutil"
-    
+  "sources": [
+    {
+      "name": "downloads",
+      "path": "/home/sysadm/Downloads/"
+    },
+    {
+      "name": "documents",
+      "path": "/home/sysadm/Documents/"
+    },
+    {
+      "name": "localbin",
+      "path": "/home/sysadm/.local/bin/"
+    },
+    {
+      "name": "devdata",
+      "path": "/home/sysadm/data/"
+    }
+  ],
+  "excludes": [
+    "node_modules",
+    ".vscode",
+    ".git",
+    ".venv",
+    "lost+found",
+    ".Trash"
+  ],
+  "dest": "gs://hex50/yoda/",
+  "localarch": "/home/sysadm/.yodaback",
+  "gsutil": "/home/sysadm/google-cloud-sdk/bin/gsutil",
+  "lastfull": "20210506f",
+  "lastdiff": 1,
+  "diffbacks": 6
 }
-
-

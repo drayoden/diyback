@@ -1,0 +1,4 @@
+node_modules
+.git
+three1.txt
+cura*
