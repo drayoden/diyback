@@ -1,13 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/python3.8
 
 import json, os
 import time, datetime
 from datetime import date
-import tarfile as tf 
+import tarfile as tf
+
+cdir = os.path.dirname(__file__)
 
 # open config file...
 try:
-    with open('./config.json') as f:
+    with open(cdir +'/config.json') as f:
         d = json.load(f)
         print('config file opened sucessfully...')
 except:
@@ -18,6 +20,7 @@ sources  = d['sources']
 excludes = d['excludes']
 destination = d['dest']
 temp = d['temp']
+gsutilcmd = d['gsutil']
 
 # print(sources)
 # print(excludes)
@@ -39,7 +42,7 @@ else:
         exit()
 
 # verify the backup destination...
-if (os.system('gsutil -q stat ' + destination) == 0 ):
+if (os.system(gsutilcmd + ' -q stat ' + destination) == 0 ):
     print('archive destination: [' + destination + ']')
 else:
     print('archive destination [' + destination + '] does not exist...' )
@@ -48,10 +51,10 @@ else:
 
 # set the filename of the archive file...
 nowt = datetime.datetime.now()
+print(nowt + ' backup started...')
 now = str(date.today()).replace('-','') + '-' + str(nowt.hour) + str(nowt.minute) + str(nowt.second)
 
 tgzfile = now
-tgzfile = '20210514-113659'
 
 # open backup log file...
 try:
@@ -77,9 +80,9 @@ with tf.open(temp + tgzfile + '.tar.gz', 'w:gz') as tar:
 
 # move the file to the gcs
 print('moving archive file and log to gcs...')
-os.system('gsutil -m mv ' + temp + tgzfile + '* ' + destination)
+os.system(gsutilcmd + ' -m mv ' + temp + tgzfile + '* ' + destination)
 
-print('backup completed successfully...')
+print('backup completed successfully...\r\n')
 
 
 

@@ -30,7 +30,16 @@
   - .yodaback
     * \full
     * \d1, \d2, .. \d6
-- script needs command-line arguments (single char): f|F (full backup) OR 1, 2... - 6 (d1, d2, ... d6) this will determine how rsync will react and which folder will be archived to gcs
+- script needs logic to determine which type of backup (full/diff). this will determine how rsync will react and which folder will be archived to gcs
+- full backup: `rsync -avh stuff/ backup/`
+- differential backup: `rsync -avh --compare-dest=$(pwd)/full/ source/ diff1/`
+- tests:
+    ```
+    rsync -a /home/sysadm/data/diyback/test/ /home/sysadm/.yodabak/full/ --delete-before
+    rsync -a --compare-dest=/home/sysadm/.yodabak/full/ /home/sysadm/data/diyback/test/ /home/sysadm/.yodabak/d4/ --delete-before
+
+    ```
+
 
 
 ## cron stuff I can never remember...
@@ -44,6 +53,12 @@ Example of job definition:
  |  |  |  |  |
  *  *  *  *  * user-name  command to be executed
 ```
-
+* edit "user" crontab: `crontab -e`
+* python:
+```
+chmod +x <python file>
+* * * * * <pwd>/path/python-job.py
+05 3 * * * /home/sysadm/.local/bin/yodaback.py >> /home/sysadm/.local/bin/yodaback.log
+```
 
 

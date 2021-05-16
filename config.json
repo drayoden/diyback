@@ -18,7 +18,8 @@
     ], 
 
     "dest": "gs://hex50/yoda/",
-    "temp": "/home/sysadm/tmp/"
+    "temp": "/home/sysadm/tmp/",
+    "gsutil": "/home/sysadm/google-cloud-sdk/bin/gsutil"
     
 }
 
