@@ -56,19 +56,25 @@ chmod +x <python file>
     * excludes can now be moved to the rsync phase of the process. tar file creatation can just backup the full or diff folder without excludes.
 - script needs logic to determine which type of backup (full/diff). this will determine how rsync will react and which incremental folder will be archived to gcs. this can be determined using the lastdiff and diffbacks from configr.json 
 
-## sudo code (rsync version):
+### sudo code (rsync version):
 - open json config file (if it exists) for config - crete objects:
-    - sources:
-        * for each source create `<localarch>/<full|dx>/<name>/`
+    - sources - get all key/value name/path pairs
     - excludes - create temporary ./exfile.txt file 
     - gcs destination folder (verify)
     - temp folder create
+- determine the destination:
+    * if lastback is 0, create full backup, update lastback to 1
+    * if lastback is < diffmax create diff backup in `d<lastback>` folder, increment lastback
+
+     `full OR dx` with lastdiff & diffbacks, when lastdiff is 0, create full backup
+- for each source name/path pair `rsync -a --exclude-from='./exfile.txt' path/ <localarch><full|dx>/name/` 
 - set archive/log filename `<date>-<time><f|d>.<tar.gz|log>` -- 'f' -> full OR 'd' -> diff
 - open/create log file in local temp folder
 - open/create archive file in local temp folder
 - start backup process
 - move tar.gz file and log file to gcs
 
+---
 
 - rsycn tests:
     * `--delete-before` -- will exclude any file/folder that has been deleted
@@ -93,5 +99,8 @@ chmod +x <python file>
     * `touch -t 2104210000 f5.txt ` -- crete a file with a specific date
     * `ls -lt` or `ls -ltr` -- sort files by date
     * `tar -tvf <filename>.tar.gz` -- list tar.gz file contents
+    * `grep -inE 'cron.*yodaback' /var/log/syslog` -- search syslog for 'cron' AND 'yodaback'
+    
+`
 
 

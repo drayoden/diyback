@@ -50,10 +50,11 @@ else:
     exit()
 
 # set the filename of the archive file...
+
+# TODO -- see new date/filename format from testhex.py
 nowt = datetime.datetime.now()
 print(nowt + ' backup started...')
 now = str(date.today()).replace('-','') + '-' + str(nowt.hour) + str(nowt.minute) + str(nowt.second)
-
 tgzfile = now
 
 # open backup log file...

@@ -14,21 +14,22 @@
     },
     {
       "name": "devdata",
-      "path": "/home/sysadm/data/"
+      "path": "/home/sysadm/data/diyback/test/"
     }
   ],
   "excludes": [
     "node_modules",
     ".vscode",
+    "cura*",
     ".git",
     ".venv",
     "lost+found",
     ".Trash"
   ],
   "dest": "gs://hex50/yoda/",
-  "localarch": "/home/sysadm/.yodaback",
+  "localarch": "/home/sysadm/.yodaarch/",
   "gsutil": "/home/sysadm/google-cloud-sdk/bin/gsutil",
-  "lastfull": "20210506f",
-  "lastdiff": 1,
-  "diffbacks": 6
+  "lastback": 4,
+  "diffmax": 3,
+  "backupgroup": 0
 }

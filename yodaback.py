@@ -2,10 +2,17 @@
 
 import json, os
 import time, datetime
-from datetime import date
+from datetime import datetime
 import tarfile as tf
 
-cdir = os.path.dirname(__file__)
+cdir = os.path.dirname(os.path.abspath(__file__))
+nowt = datetime.now()
+
+logtime = nowt.strftime("%Y-%m-%d [%H:%M]")
+print(logtime + ' backup started...') 
+
+# set the filename of the archive file...
+tgzfile = nowt.strftime("%Y%m%d-%H%M")
 
 # open config file...
 try:
@@ -14,6 +21,7 @@ try:
         print('config file opened sucessfully...')
 except:
     print('oops! cannot open config file...')
+    exit()
 
 # create lists from config file settings
 sources  = d['sources']
@@ -21,11 +29,6 @@ excludes = d['excludes']
 destination = d['dest']
 temp = d['temp']
 gsutilcmd = d['gsutil']
-
-# print(sources)
-# print(excludes)
-# print(destination)
-# print(temp)
 
 # verify temp location...
 # dumb thing: 'isdir' does not throw an exception so a try block cannot be used.
@@ -48,13 +51,6 @@ else:
     print('archive destination [' + destination + '] does not exist...' )
     print('exit on error: verify archive destination and rerun...')
     exit()
-
-# set the filename of the archive file...
-nowt = datetime.datetime.now()
-print(nowt + ' backup started...')
-now = str(date.today()).replace('-','') + '-' + str(nowt.hour) + str(nowt.minute) + str(nowt.second)
-
-tgzfile = now
 
 # open backup log file...
 try:
@@ -82,7 +78,7 @@ with tf.open(temp + tgzfile + '.tar.gz', 'w:gz') as tar:
 print('moving archive file and log to gcs...')
 os.system(gsutilcmd + ' -m mv ' + temp + tgzfile + '* ' + destination)
 
-print('backup completed successfully...\r\n')
+print('backup completed successfully...\r\n\r\n')
 
 
 
